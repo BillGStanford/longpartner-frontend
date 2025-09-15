@@ -17,7 +17,8 @@ import {
   CheckCircle
 } from 'lucide-react';
 
-const socket = io('http://localhost:5000');
+// Use environment variable for backend URL
+const socket = io(process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000');
 
 const APPEARANCE_OPTIONS = {
   male: {
@@ -72,6 +73,9 @@ function App() {
   const [selectedScenario, setSelectedScenario] = useState('');
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  // Use environment variable for backend URL in fetch requests
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
 
   useEffect(() => {
     socket.on('character-loaded', (data) => {
@@ -292,12 +296,8 @@ function App() {
     }
   };
 
-  const acceptUser = (userId) => {
-    socket.emit('admin-accept-user', { userId });
-  };
-
   const adminLogin = () => {
-    fetch('http://localhost:5000/admin/login', {
+    fetch(`${BACKEND_URL}/admin/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -318,7 +318,7 @@ function App() {
   };
 
   const banUser = (ip, type, duration = null, reason = '') => {
-    fetch('http://localhost:5000/admin/ban', {
+    fetch(`${BACKEND_URL}/admin/ban`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -362,7 +362,7 @@ function App() {
         <div className="text-center mb-8">
           <Heart className="w-16 h-16 text-pink-400 mx-auto mb-4" />
           <h1 className="text-4xl font-bold text-black mb-2">LongPartner</h1>
-          <p className="text-gray-600">Create your perfect ompanion that is real, for you.</p>
+          <p className="text-gray-600">Create your perfect companion that is real, for you.</p>
         </div>
         
         <div className="space-y-4">
